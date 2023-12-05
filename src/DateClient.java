@@ -1,3 +1,4 @@
+import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -33,8 +34,12 @@ public class DateClient {
         // відправляємо масив 2 на сервер
         outToServer.writeObject(matrix2);
 
-        // отримуємо результат від сервер відповідно до нашого запиту
-        int[][] serverResult = (int[][]) inFromServer.readObject();
+        // отримуємо результат від сервер відповідно до нашого запиту та перевіряємо чи не помилка це
+        Object o = inFromServer.readObject();
+        if (o instanceof String) {
+            throw new InvalidObjectException((String) o);
+        }
+        int[][] serverResult = (int[][]) o;
         System.out.println("\nResult matrix from server");
         PrintMatrix.printMatrix(serverResult);
 
@@ -44,8 +49,6 @@ public class DateClient {
         outToServer.close();
         inFromServer.close();
         socket.close();
-
-        System.out.println("Process completed");
 
         // для того щоб подивитися результат
         Thread.sleep(3);

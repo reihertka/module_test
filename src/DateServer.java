@@ -69,6 +69,10 @@ public class DateServer {
         // зчитуємо масив 2
         int[][] matrix2 = (int[][]) inFromClient.readObject();
 
+        if (matrix1.length != matrix2[0].length){
+            outToClient.writeObject("invalid size of 2 matrix");
+        }
+
         // виводимо масив 2 на консоль серверу
         System.out.println("matrix2 size from Client::" + matrix2.length + "x" + matrix2[0].length);
         System.out.print("matrix2 from Client:: [ ");
